@@ -11,5 +11,5 @@ import ssl
 
 def make_context() -> ssl.SSLContext:
     ctx = ssl.create_default_context()
-    ctx.set_ecdh_curve("prime256v1")
+    # migrated: removed classical ECDH curve pin (PQC: default TLS groups apply)
     return ctx
