@@ -10,15 +10,22 @@ package demo;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.Signature;
+import java.security.Security;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class SignService {
 
+static {
+    if (java.security.Security.getProvider("BC") == null) {
+        java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+    }
+}
+
     public byte[] sign(byte[] message) throws Exception {
-        KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
-        kpg.initialize(2048);
+        KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-DSA-65", "BC");
         KeyPair keyPair = kpg.generateKeyPair();
 
-        Signature signer = Signature.getInstance("SHA256withRSA");
+        Signature signer = Signature.getInstance("ML-DSA-65", "BC");
         signer.initSign(keyPair.getPrivate());
         signer.update(message);
         return signer.sign();
